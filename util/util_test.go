@@ -170,6 +170,20 @@ func TestParsePath(t *testing.T) {
 			inputData:             &schema.ResourceData{},
 			expected:              "/auth/jwt-1914071788362821795/config",
 		},
+		{
+			inputUserSuppliedPath: "accounting-transit",
+			inputEndpoint:         "/transit/export/{type}/{name}/{version}",
+			inputData: schema.TestResourceDataRaw(t, map[string]*schema.Schema{
+				"name":    {Type: schema.TypeString},
+				"type":    {Type: schema.TypeString},
+				"version": {Type: schema.TypeString},
+			}, map[string]interface{}{
+				"version": "1",
+				"type":    "encryption-key",
+				"name":    "my-key",
+			}),
+			expected: "/accounting-transit/export/encryption-key/my-key/1",
+		},
 	}
 	for _, testCase := range testCases {
 		t.Run(testCase.inputUserSuppliedPath, func(t *testing.T) {
